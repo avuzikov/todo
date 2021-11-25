@@ -1,5 +1,7 @@
 import classes from "./MainNavigation.module.css";
 import { NavLink } from "react-router-dom";
+import Logout from "../Logout";
+import Card from "../UI/Card";
 
 const MainNavigation = () => {
   return (
@@ -21,6 +23,13 @@ const MainNavigation = () => {
             >
               Change Password
             </NavLink>
+          </li>
+          <li>
+            <Logout
+              logout={() => {
+                console.log("logged out");
+              }}
+            />
           </li>
         </ul>
       </nav>
