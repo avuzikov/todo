@@ -7,6 +7,7 @@ import LoginPage from "./components/pages/LoginPage";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "./store/auth";
 import CreateProfilePage from "./components/pages/CreateProfilePage";
+import Button from "./components/UI/Button";
 
 function App() {
   const dispatch = useDispatch();
@@ -37,12 +38,9 @@ function App() {
           </Routes>
         </Layout>
       )}
-      <button
-        style={{ margin: "1rem" }}
-        onClick={loggedIn ? logoutHandler : loginHandler}
-      >
+      <Button onClick={loggedIn ? logoutHandler : loginHandler}>
         Change Login
-      </button>
+      </Button>
     </React.Fragment>
   );
 }
