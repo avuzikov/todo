@@ -1,7 +1,6 @@
 import classes from "./MainNavigation.module.css";
 import { NavLink } from "react-router-dom";
 import Logout from "../Logout";
-import Card from "../UI/Card";
 
 const MainNavigation = () => {
   return (

@@ -3,11 +3,21 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import ChangePasswordPage from "./components/pages/ChangePasswordPage";
 import ToDoListPage from "./components/pages/ToDoListPage";
 import Layout from "./components/layout/Layout";
-import { useState } from "react";
 import LoginPage from "./components/pages/LoginPage";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "./store/auth";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const dispatch = useDispatch();
+  const loginHandler = () => {
+    dispatch(authActions.login());
+  };
+  const logoutHandler = () => {
+    dispatch(authActions.logout(/*x*/)); // {type: SOME_UNIQUE_IDENTIFIER, payload: x}
+  };
+  const loggedIn = useSelector((state) => {
+    return state.auth.loggedIn;
+  });
   return (
     <React.Fragment>
       {!loggedIn && (
@@ -25,6 +35,12 @@ function App() {
           </Routes>
         </Layout>
       )}
+      <button
+        style={{ margin: "1rem" }}
+        onClick={loggedIn ? logoutHandler : loginHandler}
+      >
+        Change Login
+      </button>
     </React.Fragment>
   );
 }
