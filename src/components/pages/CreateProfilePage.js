@@ -1,20 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+const CreateProfilePage = (props) => {
   const navigate = useNavigate();
   return (
-    <React.Fragment>
-      <div>Here will be login page</div>
+    <div>
+      Create Profile
       <button
         onClick={() => {
-          navigate("/new");
+          navigate("/login");
         }}
       >
-        Want to create a new account?
+        Already have an account?
       </button>
-    </React.Fragment>
+    </div>
   );
 };
 
-export default LoginPage;
+export default CreateProfilePage;
