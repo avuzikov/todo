@@ -1,8 +1,11 @@
 import classes from "./MainNavigation.module.css";
 import { NavLink } from "react-router-dom";
-import Logout from "../Logout";
+import { authActions } from "../../store/auth";
+import { useDispatch } from "react-redux";
 
 const MainNavigation = () => {
+  const dispatch = useDispatch();
+
   return (
     <header className={classes.header}>
       <nav className={classes.nav}>
@@ -24,11 +27,15 @@ const MainNavigation = () => {
             </NavLink>
           </li>
           <li>
-            <Logout
-              logout={() => {
-                console.log("logged out");
+            <NavLink
+              to="/login"
+              className={(navData) => (navData.isActive ? classes.active : "")}
+              onClick={() => {
+                dispatch(authActions.logout());
               }}
-            />
+            >
+              Logout
+            </NavLink>
           </li>
         </ul>
       </nav>

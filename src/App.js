@@ -7,9 +7,7 @@ import CreateProfilePage from "./components/pages/CreateProfilePage";
 */
 import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import { useSelector, useDispatch } from "react-redux";
-import { authActions } from "./store/auth";
-import Button from "./components/UI/Button";
+import { useSelector } from "react-redux";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 
 const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
@@ -26,13 +24,6 @@ const CreateProfilePage = React.lazy(() =>
 /* */
 
 function App() {
-  const dispatch = useDispatch();
-  const loginHandler = () => {
-    dispatch(authActions.login());
-  };
-  const logoutHandler = () => {
-    dispatch(authActions.logout(/*x*/)); // {type: SOME_UNIQUE_IDENTIFIER, payload: x}
-  };
   const loggedIn = useSelector((state) => {
     return state.auth.loggedIn;
   });
@@ -62,9 +53,6 @@ function App() {
           </Layout>
         )}
       </Suspense>
-      <Button onClick={loggedIn ? logoutHandler : loginHandler}>
-        Change Login
-      </Button>
     </React.Fragment>
   );
 }
