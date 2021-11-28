@@ -16,19 +16,28 @@ const authSlice = createSlice({
   name: "authentification",
   initialState: initialAuthentificationState,
   reducers: {
-    login(state, action) { //expect response prop with parameters specified above
-      /*state.displayName = action.response.displayName;
-      state.email = action.response.email;
-      state.expiresIn = action.response.expiresIn;
-      state.idToken = action.response.idToken;
-      state.kind = action.response.kind;
-      state.localId = action.response.localId;
-      state.refreshToken = action.response.refreshToken;
-      state.registered = action.response.registered;
-      state.loggedIn = action.response.loggedIn;*/
-      console.log("Logged in");
+    login(state, action) {
+      state.displayName = action.displayName;
+      state.email = action.email;
+      state.expiresIn = action.expiresIn;
+      state.idToken = action.idToken;
+      state.kind = action.kind;
+      state.localId = action.localId;
+      state.refreshToken = action.refreshToken;
+      state.registered = action.registered;
+      state.loggedIn = true;
+      console.log("Logged In");
     },
     logout(state, action) {
+      state.loggedIn = false;
+      state.displayName = "";
+      state.email = "";
+      state.expiresIn = "";
+      state.idToken = "";
+      state.kind = "";
+      state.localId = "";
+      state.refreshToken = "";
+      state.registered = false;
       state.loggedIn = false;
       console.log("Logged out");
     },

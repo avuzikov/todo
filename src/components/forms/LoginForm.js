@@ -7,13 +7,20 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const LoginForm = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [loggedIn, setLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const token = useSelector((state) => {
+    return state.token.token;
+  });
+  const loginUrl = useSelector((state) => {
+    return state.token.loginUrl;
+  });
 
   const {
     value: enteredEmail,
@@ -49,48 +56,58 @@ const LoginForm = (props) => {
     //console.log(enteredEmail); //will be submission logic
     //console.log(enteredPassword);
     setIsLoading(true);
-    fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCGYBAVJLQzTA3aCmxtFfPY7LBHTBqKGJM",
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email: enteredEmail,
-          password: enteredPassword,
-          returnSecureToken: true,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(`${loginUrl}${token}`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         setIsLoading(false);
         if (res.ok) {
           return res.json(); //add user data to store
         } else {
           return res.json().then((data) => {
+            let error = "";
             if (data && data.error && data.error.message) {
-              setErrorMessage(data.error.message);
+              if (data.error.message === "EMAIL_NOT_FOUND") {
+                setErrorMessage("This email is not registered yet");
+                error = "This email is not registered yet";
+              } else if (data.error.message === "INVALID_PASSWORD") {
+                setErrorMessage("The password is incorrect");
+                error = "The password is incorrect";
+              } else if (data.error.message !== "") {
+                setErrorMessage("Something went wrong");
+                error = "Something went wrong";
+              }
             }
-            throw new Error(errorMessage);
+            throw new Error(error);
           });
         }
       })
       .then((data) => {
-        console.log(data);
+        const action = {
+          email: data.email ? data.email : "",
+          expiresIn: data.expiresIn ? data.expiresIn : "",
+          idToken: data.idToken ? data.idToken : "",
+          kind: data.kind ? data.kind : "",
+          localId: data.localId ? data.localId : "",
+          refreshToken: data.refreshToken ? data.refreshToken : "",
+          displayName: data.displayName ? data.displayName : "",
+          registered: data.registered ? true : false,
+        };
+        dispatch(authActions.login(action));
+        navigate("/");
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      .catch((err) => {});
 
     resetEmail();
     resetPassword();
-
-    setLoggedIn(true);
-    setTimeout(() => {
-      dispatch(authActions.login());
-      navigate("/");
-    }, 500);
   };
 
   const emailInputClasses = emailHasError
@@ -135,9 +152,10 @@ const LoginForm = (props) => {
       <div className={classes["form-actions"]}>
         <Button>Submit</Button>
       </div>
-      {loggedIn && <p>Logged in successfully!</p>}
       {isLoading && <p>Is loading...</p>}
-      {errorMessage !== "" && <p>{errorMessage}</p>}
+      {errorMessage !== "" && (
+        <p className={classes["error-text"]}>{errorMessage}</p>
+      )}
     </form>
   );
 };
