@@ -26,6 +26,7 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.registered = action.payload.registered;
       state.loggedIn = true;
+      localStorage.setItem("tokenInfo", JSON.stringify(action.payload));
     },
     logout(state, action) {
       state.displayName = "";
@@ -37,6 +38,7 @@ const authSlice = createSlice({
       state.refreshToken = "";
       state.registered = false;
       state.loggedIn = false;
+      localStorage.removeItem("tokenInfo");
     },
   },
 });

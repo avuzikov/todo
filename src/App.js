@@ -1,13 +1,9 @@
 import React, { Suspense } from "react";
 
-/*import ToDoListPage from "./components/pages/ToDoListPage";
-import ChangePasswordPage from "./components/pages/ChangePasswordPage";
-import LoginPage from "./components/pages/LoginPage";
-import CreateProfilePage from "./components/pages/CreateProfilePage";
-*/
+import { authActions } from "./store/auth";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "./components/UI/LoadingSpinner";
 
 const LoginPage = React.lazy(() => import("./components/pages/LoginPage"));
@@ -24,6 +20,11 @@ const CreateProfilePage = React.lazy(() =>
 /* */
 
 function App() {
+  const dispatch = useDispatch();
+  const action = JSON.parse(localStorage.getItem("tokenInfo"));
+  if (action) {
+    dispatch(authActions.login(action));
+  }
   const loggedIn = useSelector((state) => {
     return state.auth.loggedIn;
   });

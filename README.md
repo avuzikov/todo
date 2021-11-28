@@ -13,3 +13,12 @@ I use React Router v6 for simulation multipage website. Each page except for log
 ## Custom Hooks and HTTP requests
 
 In order to incapculate sending HTTP requests and keeping code lean, a custom hook for sending HTTP requests will be created
+
+## Next steps
+
+-Add animations using CSS and react-transition-group
+-Add Unit Tests with Jest
+-Move project to TypeScript
+-Add logout after timer(since Firebase token expires after one hour)
+-Add simple personalized ToDo list, the introduce grouping of ToDos
+-Introduce hooks for different types of HTTP requests to remove repitition
