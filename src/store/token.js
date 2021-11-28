@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import token from "./token_secret";
 
 const initialTokenState = {
-  token: "AIzaSyCGYBAVJLQzTA3aCmxtFfPY7LBHTBqKGJM",
+  token: token,
   loginUrl:
     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=",
   signUpUrl: "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=",
