@@ -6,10 +6,21 @@ import validatePassword from "../functions/validationFunctions/validatePassword"
 import useInput from "../hooks/use-input";
 import Button from "../UI/Button";
 import classes from "./RegistrationForm.module.css";
+import { useSelector } from "react-redux";
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
   const [registered, setRegistered] = useState(false);
+  const [failedToRegistered, setFailedToRegistered] = useState(false); //for the case if server returned an error
+  const [emailExists, setEmailExists] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("Authentification failed!");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const token = useSelector((state) => {
+    return state.token.token;
+  });
+
+  console.log(token);
 
   const {
     value: enteredName,
@@ -66,15 +77,49 @@ const RegistrationForm = () => {
       return;
     }
 
+    console.log(enteredName); //will send it later to save
+    console.log(enteredEmail);
+    console.log(enteredPassword1);
+
+    setIsLoading(true);
+    fetch(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${token}`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword1,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((res) => {
+      setIsLoading(false);
+      if (res.ok) {
+        setRegistered(true);
+        setTimeout(() => {
+          navigate("/login");
+        }, 500);
+      } else {
+        return res.json().then((data) => {
+          setFailedToRegistered(true);
+          if (data && data.error && data.error.message) {
+            if (data.error.message === "EMAIL_EXISTS") {
+              setEmailExists(true);
+            } else {
+              setErrorMessage(data.error.message);
+            }
+          }
+        });
+      }
+    });
+
     resetName();
     resetEmail();
     resetPassword1();
     resetPassword2();
-
-    setRegistered(true);
-    setTimeout(() => {
-      navigate("/login");
-    }, 500);
   };
 
   const nameInputClasses = nameHasError
@@ -154,6 +199,15 @@ const RegistrationForm = () => {
       <div className={classes["form-actions"]}>
         <Button>Submit</Button>
       </div>
+      {emailExists && (
+        <p className={classes["error-text"]}>An account already exists</p>
+      )}
+      {failedToRegistered && !emailExists && (
+        <p className={classes["error-text"]}>
+          Something went wrong: server returned "{errorMessage}" message
+        </p>
+      )}
+      {isLoading && <p>isLoading...</p>}
       {registered && <p>Successfully registered!</p>}
     </form>
   );

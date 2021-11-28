@@ -12,6 +12,9 @@ const LoginForm = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const {
     value: enteredEmail,
     isValid: emailIsValid,
@@ -45,6 +48,40 @@ const LoginForm = (props) => {
 
     //console.log(enteredEmail); //will be submission logic
     //console.log(enteredPassword);
+    setIsLoading(true);
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCGYBAVJLQzTA3aCmxtFfPY7LBHTBqKGJM",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => {
+        setIsLoading(false);
+        if (res.ok) {
+          return res.json(); //add user data to store
+        } else {
+          return res.json().then((data) => {
+            if (data && data.error && data.error.message) {
+              setErrorMessage(data.error.message);
+            }
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
 
     resetEmail();
     resetPassword();
@@ -98,7 +135,9 @@ const LoginForm = (props) => {
       <div className={classes["form-actions"]}>
         <Button>Submit</Button>
       </div>
-      {loggedIn && <p>logged in successfully!</p>}
+      {loggedIn && <p>Logged in successfully!</p>}
+      {isLoading && <p>Is loading...</p>}
+      {errorMessage !== "" && <p>{errorMessage}</p>}
     </form>
   );
 };

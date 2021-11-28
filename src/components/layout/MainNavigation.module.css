@@ -8,6 +8,14 @@
   background-color: #008080;
 }
 
+.logo {
+  font-family: "Lato", sans-serif;
+  font-size: 2rem;
+  color: white;
+  margin: 0;
+  text-decoration: none;
+}
+
 .nav ul {
   list-style: none;
   display: flex;

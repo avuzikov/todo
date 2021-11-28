@@ -1,5 +1,5 @@
 import classes from "./MainNavigation.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { authActions } from "../../store/auth";
 import { useDispatch } from "react-redux";
 
@@ -8,6 +8,9 @@ const MainNavigation = () => {
 
   return (
     <header className={classes.header}>
+      <Link to="/" style={{ textDecoration: "none" }}>
+        <div className={classes.logo}>TODO APP</div>
+      </Link>
       <nav className={classes.nav}>
         <ul>
           <li>

@@ -27,6 +27,7 @@ function App() {
   const loggedIn = useSelector((state) => {
     return state.auth.loggedIn;
   });
+
   return (
     <React.Fragment>
       <Suspense

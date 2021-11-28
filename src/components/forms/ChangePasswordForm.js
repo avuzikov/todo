@@ -10,15 +10,6 @@ const ChangePasswordForm = (props) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const {
-    value: enteredOldPassword,
-    isValid: oldPasswordIsValid,
-    hasError: oldPasswordHasError,
-    valueChangeHandler: oldPasswordChangeHandler,
-    inputBlurHandler: oldPasswordBlurHandler,
-    reset: resetOldPassword,
-  } = useInput(validatePassword);
-
-  const {
     value: enteredPassword1,
     isValid: password1IsValid,
     hasError: password1HasError,
@@ -41,8 +32,7 @@ const ChangePasswordForm = (props) => {
   if (
     password1IsValid &&
     password2IsValid &&
-    enteredPassword1 === enteredPassword2 &&
-    oldPasswordIsValid
+    enteredPassword1 === enteredPassword2
   ) {
     formIsValid = true;
   }
@@ -53,11 +43,8 @@ const ChangePasswordForm = (props) => {
     if (!formIsValid) {
       return;
     }
+    console.log(enteredPassword1); //will be submission logic
 
-    console.log(enteredOldPassword); //will be submission logic
-    console.log(enteredPassword1);
-
-    resetOldPassword();
     resetPassword1();
     resetPassword2();
     setFormSubmitted(true);
@@ -65,10 +52,6 @@ const ChangePasswordForm = (props) => {
       navigate("/");
     }, 500);
   };
-
-  const oldPasswordInputClasses = oldPasswordHasError
-    ? `${classes["form-control"]} ${classes.invalid}`
-    : `${classes["form-control"]}`;
 
   const password1InputClasses = password1HasError
     ? `${classes["form-control"]} ${classes.invalid}`
@@ -80,21 +63,6 @@ const ChangePasswordForm = (props) => {
 
   return (
     <form onSubmit={formSubmissionHandler}>
-      <div className={oldPasswordInputClasses}>
-        <label htmlFor="oldPassword">Old password</label>
-        <input
-          type="password"
-          id="oldPassword"
-          value={enteredOldPassword}
-          onChange={oldPasswordChangeHandler}
-          onBlur={oldPasswordBlurHandler}
-        />
-        {oldPasswordHasError && (
-          <p className={classes["error-text"]}>
-            Please type valid old password
-          </p>
-        )}
-      </div>
       <div className={password1InputClasses}>
         <label htmlFor="newPassword1">New password</label>
         <input
