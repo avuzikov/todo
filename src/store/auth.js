@@ -17,19 +17,17 @@ const authSlice = createSlice({
   initialState: initialAuthentificationState,
   reducers: {
     login(state, action) {
-      state.displayName = action.displayName;
-      state.email = action.email;
-      state.expiresIn = action.expiresIn;
-      state.idToken = action.idToken;
-      state.kind = action.kind;
-      state.localId = action.localId;
-      state.refreshToken = action.refreshToken;
-      state.registered = action.registered;
+      state.displayName = action.payload.displayName;
+      state.email = action.payload.email;
+      state.expiresIn = action.payload.expiresIn;
+      state.idToken = action.payload.idToken;
+      state.kind = action.payload.kind;
+      state.localId = action.payload.localId;
+      state.refreshToken = action.payload.refreshToken;
+      state.registered = action.payload.registered;
       state.loggedIn = true;
-      console.log("Logged In");
     },
     logout(state, action) {
-      state.loggedIn = false;
       state.displayName = "";
       state.email = "";
       state.expiresIn = "";
@@ -39,7 +37,6 @@ const authSlice = createSlice({
       state.refreshToken = "";
       state.registered = false;
       state.loggedIn = false;
-      console.log("Logged out");
     },
   },
 });

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import validatePassword from "../functions/validationFunctions/validatePassword";
 import useInput from "../hooks/use-input";
@@ -8,6 +9,16 @@ import classes from "./ChangePasswordForm.module.css";
 const ChangePasswordForm = (props) => {
   const navigate = useNavigate();
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const token = useSelector((state) => {
+    return state.token.token;
+  });
+  const changePassUrl = useSelector((state) => {
+    return state.token.changePassUrl;
+  });
+  const idToken = useSelector((state) => {
+    return state.auth.idToken;
+  });
 
   const {
     value: enteredPassword1,
@@ -43,14 +54,28 @@ const ChangePasswordForm = (props) => {
     if (!formIsValid) {
       return;
     }
-    console.log(enteredPassword1); //will be submission logic
+
+    fetch(`${changePassUrl}${token}`, {
+      method: "POST",
+      body: JSON.stringify({
+        idToken: idToken,
+        password: enteredPassword1,
+        returnSecureToken: false,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          navigate("/");
+        }
+      })
+      .catch((err) => {});
 
     resetPassword1();
     resetPassword2();
     setFormSubmitted(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 500);
   };
 
   const password1InputClasses = password1HasError

@@ -6,6 +6,8 @@ const initialTokenState = {
   loginUrl:
     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=",
   signUpUrl: "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=",
+  changePassUrl:
+    "https://identitytoolkit.googleapis.com/v1/accounts:update?key=",
 };
 
 const tokenSlice = createSlice({

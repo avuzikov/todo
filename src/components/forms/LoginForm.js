@@ -53,8 +53,6 @@ const LoginForm = (props) => {
       return;
     }
 
-    //console.log(enteredEmail); //will be submission logic
-    //console.log(enteredPassword);
     setIsLoading(true);
     fetch(`${loginUrl}${token}`, {
       method: "POST",
