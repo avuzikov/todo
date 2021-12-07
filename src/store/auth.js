@@ -10,6 +10,7 @@ const initialAuthentificationState = {
   localId: "",
   refreshToken: "",
   registered: false,
+  expirationTime: "",
 };
 
 const authSlice = createSlice({
@@ -25,9 +26,11 @@ const authSlice = createSlice({
       state.localId = action.payload.localId;
       state.refreshToken = action.payload.refreshToken;
       state.registered = action.payload.registered;
+      state.expirationTime = action.payload.expirationTime;
       state.loggedIn = true;
       localStorage.setItem("tokenInfo", JSON.stringify(action.payload));
     },
+
     logout(state, action) {
       state.displayName = "";
       state.email = "";
@@ -38,6 +41,7 @@ const authSlice = createSlice({
       state.refreshToken = "";
       state.registered = false;
       state.loggedIn = false;
+      state.expirationTime = "";
       localStorage.removeItem("tokenInfo");
     },
   },

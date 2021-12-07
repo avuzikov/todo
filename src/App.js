@@ -16,15 +16,25 @@ const ToDoListPage = React.lazy(() =>
 const CreateProfilePage = React.lazy(() =>
   import("./components/pages/CreateProfilePage")
 );
-
 /* */
 
 function App() {
+  console.log("Will be glad to see you for an interview!");
+  console.log(
+    "My github with code of the project: https://github.com/avuzikov/todo"
+  );
   const dispatch = useDispatch();
+
   const action = JSON.parse(localStorage.getItem("tokenInfo"));
-  if (action) {
+
+  const time = new Date().getTime();
+
+  if (action && parseInt(action.expirationTime) <= time) {
+    dispatch(authActions.logout(action));
+  } else if (action) {
     dispatch(authActions.login(action));
   }
+
   const loggedIn = useSelector((state) => {
     return state.auth.loggedIn;
   });

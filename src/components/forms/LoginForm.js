@@ -89,6 +89,8 @@ const LoginForm = (props) => {
         }
       })
       .then((data) => {
+        let time = new Date().getTime();
+        time += (data.expiresIn ? parseInt(data.expiresIn) : 0) * 1000;
         const action = {
           email: data.email ? data.email : "",
           expiresIn: data.expiresIn ? data.expiresIn : "",
@@ -98,6 +100,7 @@ const LoginForm = (props) => {
           refreshToken: data.refreshToken ? data.refreshToken : "",
           displayName: data.displayName ? data.displayName : "",
           registered: data.registered ? true : false,
+          expirationTime: time.toString(),
         };
         dispatch(authActions.login(action));
         navigate("/");
