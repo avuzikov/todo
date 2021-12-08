@@ -1,5 +1,7 @@
+import Todo from "../simpleTodos/Todo";
+
 const ToDoListPage = () => {
-  return <div>To Do List</div>;
+  return <Todo />;
 };
 
 export default ToDoListPage;

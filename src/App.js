@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 
 import { authActions } from "./store/auth";
 import { Route, Routes, Navigate } from "react-router-dom";
@@ -19,10 +19,13 @@ const CreateProfilePage = React.lazy(() =>
 /* */
 
 function App() {
-  console.log("Will be glad to see you for an interview!");
-  console.log(
-    "My github with code of the project: https://github.com/avuzikov/todo"
-  );
+  useEffect(() => {
+    console.log("Will be glad to see you for an interview!");
+    console.log(
+      "My github with code of the project: https://github.com/avuzikov/todo"
+    );
+  }, []);
+
   const dispatch = useDispatch();
 
   const action = JSON.parse(localStorage.getItem("tokenInfo"));
