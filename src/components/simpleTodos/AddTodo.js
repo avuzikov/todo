@@ -3,13 +3,19 @@ import classes from "./AddTodo.module.css";
 import Button from "../UI/Button";
 import Card from "../UI/Card";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { todoActions } from "../../store/todo";
 
 const AddTodo = () => {
+  const dispatch = useDispatch();
   const uid = useSelector((state) => {
     return state.auth.localId;
   });
   const idToken = useSelector((state) => {
     return state.auth.idToken;
+  });
+  const todosPath = useSelector((state) => {
+    return state.token.todosPath;
   });
 
   const taskRef = useRef("");
@@ -26,18 +32,17 @@ const AddTodo = () => {
       return;
     }
     try {
-      const response = await fetch(
-        `https://todo-6ba5c-default-rtdb.firebaseio.com/todos/${uid}.json?auth=${idToken}`,
-        {
-          method: "POST",
-          body: JSON.stringify({ value: value, type: taskType }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${todosPath}${uid}.json?auth=${idToken}`, {
+        method: "POST",
+        body: JSON.stringify({ value: value, type: taskType }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const idTask = await response.json();
-      console.log("Task ID:", idTask.name);
+
+      const action = { id: idTask.name, value: value, type: taskType };
+      dispatch(todoActions.addElement(action));
     } catch (err) {
       console.log("Something went wrong");
       console.log(err);
