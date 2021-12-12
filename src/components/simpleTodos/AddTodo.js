@@ -1,34 +1,78 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import classes from "./AddTodo.module.css";
 import Button from "../UI/Button";
 import Card from "../UI/Card";
+import { useSelector } from "react-redux";
 
 const AddTodo = () => {
-  const taskRef = useRef("");
+  const uid = useSelector((state) => {
+    return state.auth.localId;
+  });
+  const idToken = useSelector((state) => {
+    return state.auth.idToken;
+  });
 
-  function submitHandler(event) {
+  const taskRef = useRef("");
+  const [taskType, setTaskType] = useState("other");
+
+  const updateTaskType = (event) => {
+    setTaskType(event.target.value);
+  };
+
+  async function submitHandler(event) {
     event.preventDefault();
-    if (taskRef.current.value === "") {
+    const value = taskRef.current.value;
+    if (value === "") {
       return;
     }
-
-    //write correct post response to the database
-    /*const response = await fetch('https://react-http-6b4a6.firebaseio.com/movies.json', {
-      method: 'POST',
-      body: JSON.stringify(movie),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });*/
-
-    console.log(taskRef.current.value);
+    try {
+      const response = await fetch(
+        `https://todo-6ba5c-default-rtdb.firebaseio.com/todos/${uid}.json?auth=${idToken}`,
+        {
+          method: "POST",
+          body: JSON.stringify({ value: value, type: taskType }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const idTask = await response.json();
+      console.log("Task ID:", idTask.name);
+    } catch (err) {
+      console.log("Something went wrong");
+      console.log(err);
+    }
+    taskRef.current.value = "";
+    setTaskType("other");
   }
+
   return (
     <Card className={classes.card}>
       <form onSubmit={submitHandler} className={classes.form}>
         <div className={classes.control}>
-          <label htmlFor="newTask"></label>
+          <label htmlFor="newTask">New Task</label>
           <input type="text" id="newTask" ref={taskRef} />
+        </div>
+        <div className={classes.control}>
+          <label>Choose category</label>
+          <select
+            value={taskType}
+            onChange={updateTaskType}
+            className={classes[`${taskType}`]}
+          >
+            <option value="work" className={classes.work}>
+              work
+            </option>
+            <option value="study" className={classes.study}>
+              study
+            </option>
+            <option value="personal" className={classes.personal}>
+              personal
+            </option>
+            <option value="other" className={classes.other}>
+              other
+            </option>
+          </select>
         </div>
         <Button className={classes.button}>Add Task</Button>
       </form>

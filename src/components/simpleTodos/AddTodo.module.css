@@ -33,8 +33,33 @@
   border: 1px solid #ccc;
 }
 
+.control select {
+  display: block;
+  width: 30%;
+  font: inherit;
+  padding: 0.2rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
 .control input:focus,
 .control textarea:focus {
   outline: none;
   border-color: #230052;
+}
+
+.work {
+  background-color: #d77a61;
+}
+
+.study {
+  background-color: #9bc59d;
+}
+
+.personal {
+  background-color: #d0fcb3;
+}
+
+.other {
+  background-color: white;
 }
